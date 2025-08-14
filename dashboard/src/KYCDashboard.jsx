@@ -509,10 +509,10 @@ const KYCDashboard = () => {
                           <PieChart>
                             {/* Render grey background rings first */}
                             {[
-                              { start: 0, end: 360 }, // First arc
-                              { start: 0, end: 360 }, // Second arc
-                              { start: 0, end: 360 }, // Third arc
-                              { start: 0, end: 360 }, // Fourth arc
+                              { start: 0, end: 360 }, 
+                              { start: 0, end: 360 }, 
+                              { start: 0, end: 360 }, 
+                              { start: 0, end: 360 }, 
                             ].map((angle, index) => (
                               <Pie
                                 key={`bg-pie-${index}`}
@@ -534,10 +534,10 @@ const KYCDashboard = () => {
                             ))}
                             {/* Define custom angles for each arc */}
                             {[
-                              { start: 250, end: 320 }, // First arc
-                              { start: 250, end: 340 }, // Second arc
-                              { start: 200, end: 360 }, // Third arc
-                              { start: 220, end: 320 }, // Fourth arc
+                              { start: 250, end: 320 }, 
+                              { start: 250, end: 340 }, 
+                              { start: 200, end: 360 }, 
+                              { start: 220, end: 320 }, 
                             ].map((angle, index) => (
                               <Pie
                                 key={`pie-${index}`}
