@@ -34,6 +34,9 @@ import {
   Pie,
   Cell,
 } from "recharts";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+
 
 const KYCDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -152,6 +155,20 @@ const KYCDashboard = () => {
     </div>
   );
 
+  // Function to generate PDF
+const handleDownloadPDF = () => {
+  const input = document.getElementById("dashboard-content"); // main div for export
+  html2canvas(input, { scale: 2 }).then((canvas) => {
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF("p", "mm", "a4");
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("KYC_Dashboard.pdf");
+  });
+};
+
+
   const Navbar = () => (
     <header className="bg-white border-b border-gray-200 px-6 py-4">
       <div className="flex items-center justify-between">
@@ -166,6 +183,12 @@ const KYCDashboard = () => {
           <div>
             <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
           </div>
+           <button
+  onClick={handleDownloadPDF}
+  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+>
+  Download PDF
+</button>
         </div>
 
         <div className="flex items-center space-x-4">
@@ -223,7 +246,7 @@ const KYCDashboard = () => {
         <div className="flex-1 flex flex-col">
           <Navbar />
 
-          <main className="flex-1 p-6">
+          <main id="dashboard-content" className="flex-1 p-6">
             {/* Header Section */}
             <div className="mb-6">
               {/* Title */}
@@ -595,6 +618,7 @@ const KYCDashboard = () => {
                     </div>
                   )}
                 </div>
+
                 {/* PAN Stats */}
                 <div className="bg-white rounded-lg p-6">
                   <div className="space-y-6">
