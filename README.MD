@@ -77,4 +77,4 @@ yarn build
 yarn start
 ```
 ### Screenshot of the Dashboard
-![alt text](image copy.png)
+![Dashboard Screenshot](dashboard.png)
