@@ -76,5 +76,31 @@ or
 yarn build
 yarn start
 ```
+### Install Capacitor in Your Project
+
+```bash
+npm install @capacitor/core @capacitor/cli
+npm install @capacitor/filesystem @capacitor/share
+```
+### Add Android Platform
+
+```bash
+npm install @capacitor/android
+npx cap add android
+```
+
+### Sync Web Code with Android
+
+```bash
+npx cap copy
+npx cap sync
+```
+### Open in Android Studio
+
+```bash 
+npx cap open android
+```
+
+
 ### Screenshot of the Dashboard
 ![Dashboard Screenshot](dashboard.png)
