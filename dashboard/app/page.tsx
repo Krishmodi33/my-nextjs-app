@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import {
   Menu,
@@ -36,6 +37,8 @@ import {
 } from "recharts";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { downloadPDF } from './downloadpdf';
+
 
 const KYCDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -154,18 +157,44 @@ const KYCDashboard = () => {
     </div>
   );
 
-  // Function to generate PDF
-const handleDownloadPDF = () => {
-  const input = document.getElementById("dashboard-content"); // main div for export
-  html2canvas(input, { scale: 2 }).then((canvas) => {
-    const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF("p", "mm", "a4");
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save("KYC_Dashboard.pdf");
-  });
+const handleDownloadPDF = async () => {
+  const input = document.getElementById("dashboard-content");
+  if (!input) return;
+
+  // Generate canvas from dashboard
+  const canvas = await html2canvas(input, { scale: 2 });
+  const imgData = canvas.toDataURL("image/png");
+  const pdf = new jsPDF("p", "mm", "a4");
+
+  const pdfWidth = pdf.internal.pageSize.getWidth();
+  const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+  pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+
+  // Detect if running inside Capacitor (mobile app)
+  const isCapacitor = typeof (window as any).Capacitor !== "undefined";
+
+  if (isCapacitor) {
+    // Mobile App → Save PDF with Capacitor
+    const pdfOutput = pdf.output("datauristring");
+    const base64Data = pdfOutput.split(",")[1]; // remove prefix
+
+    const { Filesystem, Directory } = await import("@capacitor/filesystem");
+
+    const fileName = `KYC_Dashboard_${Date.now()}.pdf`;
+    await Filesystem.writeFile({
+      path: fileName,
+      data: base64Data,
+      directory: Directory.Documents, // stored in Documents folder
+    });
+
+    alert(`✅ PDF saved in Documents as ${fileName}`);
+  } else {
+    // Web Browser → Normal download
+    pdf.save(`KYC_Dashboard_${Date.now()}.pdf`);
+  }
 };
+
 
 
   const Navbar = () => (
